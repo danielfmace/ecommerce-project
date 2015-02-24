@@ -1,0 +1,47 @@
+{% load staticfiles %}
+
+<HEAD>
+	<TITLE>JavaScript Toolbox - Calendar Popup To Select Date</TITLE>
+	<SCRIPT LANGUAGE="JavaScript" SRC="{% static 'rides/CalendarPopup.js' %}"></SCRIPT>
+	<SCRIPT LANGUAGE="JavaScript">
+	var cal = new CalendarPopup();
+	cal.showNavigationDropdowns();
+	</SCRIPT>
+	<SCRIPT LANGUAGE="JavaScript">document.write(getCalendarStyles());</SCRIPT>
+</HEAD>
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'rides/style.css' %}" />
+
+
+<img class="displayed" src="{% static "rides/fullrideslogo_w_txt.png" %}" align="middle" 
+alt="Logo" height="324" widght="360"/>
+<div class="center">
+<p class="main">
+
+<FORM NAME="example" class="main" align="middle">
+Enter your desired travel date:<br>
+<INPUT TYPE="text" NAME="date1xx" VALUE="" SIZE=25>
+<A HREF="#" onClick="cal.select(document.forms[0].date1xx,'anchor1xx','MM/dd/yyyy'); return false;" TITLE="cal.select(document.forms[0].date1xx,'anchor1xx','MM/dd/yyyy'); return false;" NAME="anchor1xx" ID="anchor1xx">select</A>
+
+</FORM>
+</p>
+</div>
+
+<img class="displayed" src="{% static "rides/rider_button.png" %}" align="middle" alt="Rider"/>
+
+<br>
+
+<img class="displayed" src="{% static "rides/driver_button.png" %}" align="middle" alt="Driver"/>
+
+
+
+<!-- {% if users %}
+    <ul>
+    {% for user in users %}
+        <li><a href="/rides/{{ user.id }}/">{{ user.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No users are available.</p>
+{% endif %} -->
