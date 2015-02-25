@@ -13,17 +13,31 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'rides/style.css' %}" />
 
+<A href="url" style="float: right">login | sign up</A>
 
-<img class="displayed" src="{% static "rides/fullrideslogo_w_txt.png" %}" align="middle" 
-alt="Logo" height="324" widght="360"/>
+
 <div class="center">
 <p class="main">
+
+<img class="displayed" src="{% static "rides/fullrideslogo_w_txt.png" %}" 
+alt="Logo" height="324" widght="360"/>
 
 <FORM NAME="example" class="main" align="middle">
 Enter your desired travel date:<br>
 <INPUT TYPE="text" NAME="date1xx" VALUE="" SIZE=25>
 <A HREF="#" onClick="cal.select(document.forms[0].date1xx,'anchor1xx','MM/dd/yyyy'); return false;" TITLE="cal.select(document.forms[0].date1xx,'anchor1xx','MM/dd/yyyy'); return false;" NAME="anchor1xx" ID="anchor1xx">select</A>
 
+</FORM>
+
+<FORM NAME="example" class="main" align="middle">
+ Select a location: <br>
+ <select name="something">
+  <option value="wash_DC">Washinton D.C.</option>
+  <option value="jmu">JMU</option>
+  <option value="va_beach">Virginia Beach</opton>
+  <option value="richmond">Richmond</option>
+  <option value="other">Other</opton>
+ </select>
 </FORM>
 </p>
 </div>
