@@ -1,7 +1,7 @@
 {% load staticfiles %}
 
 <HEAD>
-	<TITLE>JavaScript Toolbox - Calendar Popup To Select Date</TITLE>
+	<TITLE>Welcome to FreeRides!</TITLE>
 	<SCRIPT LANGUAGE="JavaScript" SRC="{% static 'rides/CalendarPopup.js' %}"></SCRIPT>
 	<SCRIPT LANGUAGE="JavaScript">
 	var cal = new CalendarPopup();
@@ -15,23 +15,23 @@
 
 <A href="url" style="float: right">login | sign up</A>
 
-
 <div class="center">
 <p class="main">
 
 <img class="displayed" src="{% static "rides/fullrideslogo_w_txt.png" %}" 
-alt="Logo" height="324" widght="360"/>
+alt="Logo" height="424" widght="460"/>
 
 <FORM NAME="example" class="main" align="middle">
-Enter your desired travel date:<br>
-<INPUT TYPE="text" NAME="date1xx" VALUE="" SIZE=25>
-<A HREF="#" onClick="cal.select(document.forms[0].date1xx,'anchor1xx','MM/dd/yyyy'); return false;" TITLE="cal.select(document.forms[0].date1xx,'anchor1xx','MM/dd/yyyy'); return false;" NAME="anchor1xx" ID="anchor1xx">select</A>
+Select a travel date:<br>
+<INPUT TYPE="text" NAME="date1xx" VALUE="" SIZE=10>
+<A HREF="#" onClick="cal.select(document.forms[0].date1xx,'anchor1xx','MM/dd/yyyy'); return false;" TITLE="cal.select(document.forms[0].date1xx,'anchor1xx','MM/dd/yyyy'); return false;" NAME="anchor1xx" ID="anchor1xx">calendar</A>
 
 </FORM>
 
 <FORM NAME="example" class="main" align="middle">
  Select a location: <br>
  <select name="something">
+  <option value="blank"></option>
   <option value="wash_DC">Washinton D.C.</option>
   <option value="jmu">JMU</option>
   <option value="va_beach">Virginia Beach</opton>
