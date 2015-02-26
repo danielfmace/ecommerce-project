@@ -14,7 +14,16 @@ IMG.displayed {
     width: 70%;
 }
 
+.buttons {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 30px; 
+}
 
+#images{
+    text-align:center;
+}
 
 p.main {
 	text-align: center;

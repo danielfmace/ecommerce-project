@@ -1,7 +1,7 @@
 {% load staticfiles %}
 
 <HEAD>
-	<TITLE>Welcome to FreeRides!</TITLE>
+	<TITLE>Welcome to FullRides!</TITLE>
 	<SCRIPT LANGUAGE="JavaScript" SRC="{% static 'rides/CalendarPopup.js' %}"></SCRIPT>
 	<SCRIPT LANGUAGE="JavaScript">
 	var cal = new CalendarPopup();
@@ -19,8 +19,8 @@
 <p class="main">
 
 <img class="displayed" src="{% static "rides/fullrideslogo_w_txt.png" %}" 
-alt="Logo" height="424" widght="460"/>
-
+alt="Logo" height="324" widght="360"/>
+<br><br>
 <FORM NAME="example" class="main" align="middle">
 Select a travel date:<br>
 <INPUT TYPE="text" NAME="date1xx" VALUE="" SIZE=10>
@@ -41,13 +41,12 @@ Select a travel date:<br>
 </FORM>
 </p>
 </div>
-
-<a href="www.link.com"><img class="displayed" src="{% static "rides/rider_button.png" %}" align="middle" alt="Rider"/></a>
-
+<div id="images">
+<a href="www.link.com"><img class="buttons" src="{% static "rides/rider_button.png" %}" align="middle" alt="Rider"/></a>     
+<a href="www.link.com"><img class="buttons" src="{% static "rides/driver_button.png" %}" align="middle" alt="Driver"/></a>
+</div>
 <br>
-
-<a href="www.link.com"><img class="displayed" src="{% static "rides/driver_button.png" %}" align="middle" alt="Driver"/></a>
-
+<A href="url" style="position: absolute; bottom: 10; right: 14; text-align:right;">about | FAQ | legal | contact us</A>
 
 
 <!-- {% if users %}
