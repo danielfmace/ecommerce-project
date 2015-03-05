@@ -1,8 +1,8 @@
 Steps for deploying Free Rides project:
 
-1. Run cd freerides
+1. Run cd freerides if not already in the freerides directory.
 
-2. Run pip3 install ­-r requirements.txt
+2. Run pip3 install -r requirements.txt
 
 3. Run python3 manage.py runserver
 
