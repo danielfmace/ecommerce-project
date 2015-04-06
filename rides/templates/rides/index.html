@@ -12,8 +12,13 @@
 
 
 <link rel="stylesheet" type="text/css" href="{% static 'rides/style.css' %}" />
-
-<A href="url" style="float: right">login | sign up</A>
+{% if user.is_authenticated %}
+    <a href="/rides/account/" style="float: right"> {{ user.username }}'s Account</a>
+    <br>
+    <a href="/rides/logout/" style="float: right"> Logout </a>
+{% else %}
+    <a href="/rides/register/" style="float: right">Register Here</a>
+{% endif %}
 
 <div class="center">
 <p class="main">
@@ -28,8 +33,19 @@ Select a travel date:<br>
 
 </FORM>
 
-<FORM NAME="example" class="main" align="middle">
- Select a location: <br>
+<FORM NAME="start" class="main" align="middle">
+ Select a starting point: <br>
+ <select name="something">
+  <option value="blank"></option>
+  <option value="wash_DC">Washinton D.C.</option>
+  <option value="jmu">JMU</option>
+  <option value="va_beach">Virginia Beach</opton>
+  <option value="richmond">Richmond</option>
+  <option value="other">Other</opton>
+ </select>
+</FORM>
+<FORM NAME="dest" class="main" align="middle">
+ Select a destination: <br>
  <select name="something">
   <option value="blank"></option>
   <option value="wash_DC">Washinton D.C.</option>
