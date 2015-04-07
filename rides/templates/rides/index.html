@@ -26,41 +26,33 @@
 <img class="displayed" src="{% static "rides/fullrideslogo_w_txt.png" %}" 
 alt="Logo" height="324" widght="360"/>
 <br><br>
-<FORM NAME="example" class="main" align="middle">
-Select a travel date:<br>
-<INPUT TYPE="text" NAME="date1xx" VALUE="" SIZE=10>
-<A HREF="#" onClick="cal.select(document.forms[0].date1xx,'anchor1xx','MM/dd/yyyy'); return false;" TITLE="cal.select(document.forms[0].date1xx,'anchor1xx','MM/dd/yyyy'); return false;" NAME="anchor1xx" ID="anchor1xx">calendar</A>
+<form id="ride_form" method="post" action="/rides/"
+                enctype="multipart/form-data" class="main" align="middle">
 
-</FORM>
+            {% csrf_token %}
 
-<FORM NAME="start" class="main" align="middle">
- Select a starting point: <br>
- <select name="something">
-  <option value="blank"></option>
-  <option value="wash_DC">Washinton D.C.</option>
-  <option value="jmu">JMU</option>
-  <option value="va_beach">Virginia Beach</opton>
-  <option value="richmond">Richmond</option>
-  <option value="other">Other</opton>
- </select>
-</FORM>
-<FORM NAME="dest" class="main" align="middle">
- Select a destination: <br>
- <select name="something">
-  <option value="blank"></option>
-  <option value="wash_DC">Washinton D.C.</option>
-  <option value="jmu">JMU</option>
-  <option value="va_beach">Virginia Beach</opton>
-  <option value="richmond">Richmond</option>
-  <option value="other">Other</opton>
- </select>
-</FORM>
-</p>
-</div>
-<div id="images">
-<a href="www.link.com"><img class="buttons" src="{% static "rides/rider_button.png" %}" align="middle" alt="Rider"/></a>     
-<a href="www.link.com"><img class="buttons" src="{% static "rides/driver_button.png" %}" align="middle" alt="Driver"/></a>
-</div>
+            <!-- Display each form. The as_p method wraps each element in a paragraph
+                 (<p>) element. This ensures each element appears on a new line,
+                 making everything look neater. -->
+            {{ ride_form.as_p }}
+
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Drive" />
+</form>
+<form id="ride_form" method="post" action="/rides/search/"
+                enctype="multipart/form-data" class="main" align="middle">
+
+            {% csrf_token %}
+
+            <!-- Display each form. The as_p method wraps each element in a paragraph
+                 (<p>) element. This ensures each element appears on a new line,
+                 making everything look neater. -->
+            {{ ride_form.as_p }}
+
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Ride" />
+</form>
+
 <br>
 <A href="url" style="position: absolute; bottom: 10; right: 14; text-align:right;">about | FAQ | legal | contact us</A>
 
