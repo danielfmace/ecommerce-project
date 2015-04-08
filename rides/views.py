@@ -38,6 +38,15 @@ def index(request):
 			{'ride_form': ride_form},
 			context)
 
+def profile(request):
+	context = RequestContext(request)
+	current_user = request.user
+	current_student = Student.objects.get(user=current_user)
+	return render_to_response(
+		'rides/profile.html',
+		{'current_user': current_user, 'current_student': current_student},
+		context)
+
 def search(request):
 	context = RequestContext(request)
 	current_user = request.user
@@ -87,7 +96,8 @@ def register(request):
 			# This delays saving the model until we're ready to avoid integrity problems.
 			student = student_form.save(commit=False)
 			student.user = user
-			student.avatar = request.FILES['avatar']
+			if 'avatar' in request.FILES:
+				student.avatar = request.FILES['avatar']
 			# Now we save the UserProfile model instance.
 			student.save()
 
