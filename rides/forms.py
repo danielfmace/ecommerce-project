@@ -47,6 +47,10 @@ class StudentForm(forms.ModelForm):
 
 		return avatar
 
+class ScheduleForm(forms.Form):
+	def __init__(self, ride, *args, **kwargs):
+		super(ScheduleForm, self).__init__(*args, **kwargs)
+		self.fields['rides'] = forms.ChoiceField(choices = [ (r.id, str(r)) for r in Ride.objects.filter(start = ride.start, dest = ride.start)])
 
 class RideForm(forms.ModelForm):
 	class Meta:

@@ -4,7 +4,7 @@ from django.contrib.auth import logout
 from django.contrib.auth import login
 
 from django.shortcuts import render, render_to_response
-from rides.forms import UserForm, StudentForm, RideForm
+from rides.forms import UserForm, StudentForm, RideForm, ScheduleForm
 from django.template import RequestContext
 
 from django.contrib.auth.models import User
@@ -38,30 +38,70 @@ def index(request):
 			{'ride_form': ride_form},
 			context)
 
-def profile(request):
+def cancel(request):
 	context = RequestContext(request)
 	current_user = request.user
 	current_student = Student.objects.get(user=current_user)
+	ride_id = request.POST['submitButton']
+	ride = Ride.objects.get(id=ride_id)
+	ride.riders.remove(current_student)
+
+	return render_to_response(
+		'rides/cancel.html',
+		{'ride': ride},
+		context)
+
+@login_required
+def schedule(request):
+	context = RequestContext(request)
+	# Get current user and student information
+	current_user = request.user
+	current_student = Student.objects.get(user=current_user)
+	# Get ride_id from request.POST
+	ride_id = request.POST['rides']
+	ride = Ride.objects.get(id=ride_id)
+	ride.riders.add(current_student)
+	return render_to_response(
+			'rides/schedule.html',
+			{'ride': ride},
+			context)
+
+@login_required
+def profile(request):
+	context = RequestContext(request)
+	# Get current user and student
+	current_user = request.user
+	current_student = Student.objects.get(user=current_user)
+
 	return render_to_response(
 		'rides/profile.html',
 		{'current_user': current_user, 'current_student': current_student},
 		context)
 
+@login_required
 def search(request):
 	context = RequestContext(request)
+	# Get current user and student information
 	current_user = request.user
 	current_student = Student.objects.get(user=current_user)
+	
+	# Generate ride_form from POST data
 	ride_form = RideForm(initial={'seats': current_student.seats, 'driver': current_user}, data=request.POST)
-	ride = ride_form.save(commit=False)
-	start = ride.start
-	dest = ride.dest
-	time = ride.time
-	identity = ride.id
-
+	if ride_form.is_valid():
+		# Construct a ride object from ride_form
+		ride = ride_form.save(commit=False)
+		start = ride.start
+		dest = ride.dest
+		time = ride.time
+		identity = ride.id
+		ride.driver = current_user
+	else:
+		print(ride_form.errors)
 	rides = Ride.objects.filter(start=start, dest=dest)
+	schedule_form = ScheduleForm(ride)
 	return render_to_response(
 			'rides/search.html',
-			{'ride_form': ride_form, 'start': start, 'dest': dest, 'time': time, 'rides': rides, 'identity': identity},
+			{'schedule_form': schedule_form, 'ride_form': ride_form, 'start': start, 'dest': dest, 'time': time, 'rides': rides, 'identity': identity},
 			context)
 
 
@@ -121,3 +161,4 @@ def register(request):
 			'rides/register.html',
 			{'user_form': user_form, 'student_form': student_form, 'registered': registered},
 			context)
+
