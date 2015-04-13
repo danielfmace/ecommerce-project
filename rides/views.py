@@ -14,6 +14,8 @@ from rides.models import Student, Ride
 def index(request):
 	context = RequestContext(request)
 	current_user = request.user
+	scheduled_ride = ""
+	scheduled = ""
 	current_student = Student.objects.get(user=current_user)
 	if (request.method == 'POST'):
 		# Attempt to grab information from the raw form information.
@@ -22,6 +24,11 @@ def index(request):
 		# If the form is valid...
 		if ride_form.is_valid():
 			ride = ride_form.save()
+			str_start = str(ride_form.cleaned_data['start'])
+			str_dest = str(ride_form.cleaned_data['dest'])
+			str_time = str(ride_form.cleaned_data['time'])
+			scheduled = "Thanks for scheduling your ride!"
+			scheduled_ride = "Start: " + str_start + ", Dest: " + str_dest + ", Time: " + str_time
 		# Invalid form or forms - mistakes or something else?
 		# Print problems to the terminal.
 		# They'll also be shown to the user.
@@ -35,7 +42,7 @@ def index(request):
 	# Render the template depending on the context.
 	return render_to_response(
 			'rides/index.html',
-			{'ride_form': ride_form},
+			{'ride_form': ride_form, 'scheduled_ride': scheduled_ride, 'scheduled': scheduled},
 			context)
 
 def cancel(request):

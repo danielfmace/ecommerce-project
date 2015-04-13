@@ -2,12 +2,6 @@
 
 <HEAD>
 	<TITLE>Welcome to FullRides!</TITLE>
-	<SCRIPT LANGUAGE="JavaScript" SRC="{% static 'rides/CalendarPopup.js' %}"></SCRIPT>
-	<SCRIPT LANGUAGE="JavaScript">
-	var cal = new CalendarPopup();
-	cal.showNavigationDropdowns();
-	</SCRIPT>
-	<SCRIPT LANGUAGE="JavaScript">document.write(getCalendarStyles());</SCRIPT>
 </HEAD>
 
 
@@ -25,7 +19,13 @@
 
 <img class="displayed" src="{% static "rides/fullrideslogo_w_txt.png" %}" 
 alt="Logo" height="324" widght="360"/>
-<br><br>
+{{ scheduled }}
+<br>
+{{ scheduled_ride }}
+<br>
+<br>
+Schedule a ride:
+<br>
 <form id="ride_form" method="post" action="/rides/"
                 enctype="multipart/form-data" class="main" align="middle">
 
