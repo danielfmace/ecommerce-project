@@ -1,16 +1,5 @@
 {% load staticfiles %}
 
-<HEAD>
-	<TITLE>Welcome to FullRides!</TITLE>
-	<SCRIPT LANGUAGE="JavaScript" SRC="{% static 'rides/CalendarPopup.js' %}"></SCRIPT>
-	<SCRIPT LANGUAGE="JavaScript">
-	var cal = new CalendarPopup();
-	cal.showNavigationDropdowns();
-	</SCRIPT>
-	<SCRIPT LANGUAGE="JavaScript">document.write(getCalendarStyles());</SCRIPT>
-</HEAD>
-
-
 <link rel="stylesheet" type="text/css" href="{% static 'rides/style.css' %}" />
 {% if user.is_authenticated %}
     <a href="/rides/account/" style="float: right"> {{ user.username }}'s Account</a>
@@ -26,15 +15,15 @@
 <img class="displayed" src="{% static "rides/fullrideslogo_w_txt.png" %}" 
 alt="Home" height="162" widght="180"/>
 </a>
-<br><br>
-
-You've cancelled your ride with:
-<br>
-Driver: {{ ride.driver.first_name }} {{ ride.driver.last_name }}
-<br>
-Start: {{ ride.start }}
-<br>
-Dest: {{ ride.dest }}
-<br>
-Time: {{ ride.time }}
-<br>
+<p>Your reviews:</p>
+{% if reviews %}
+	{% for review in reviews %}
+	<br>
+	<p>Rating: {{ review.rating }}</p>
+	<p>Comments: {{ review.comments }}</p>
+	<p>Ride: {{ review.ride.time }}</p>
+	<br>
+	{% endfor %}
+{% else %}
+You don't have any reviews yet.
+{% endif %}

@@ -9,6 +9,13 @@ class Student(models.Model):
 	rating = models.FloatField(max_length=1, default=0)
 	phone = models.IntegerField(max_length=10)
 	avatar = models.ImageField(upload_to='images', blank=True, null=True)
+	def updateRating(self, reviews):
+		numReviews = 0
+		totRating = 0
+		for r in reviews:
+			numReviews += 1
+			totRating += r.rating
+		self.rating = totRating/numReviews
 	def __str__(self):
 		return "(" + self.user.first_name + ", " + self.user.last_name + ", " + self.user.email + ")"
 
@@ -42,7 +49,11 @@ class Ride(models.Model):
 	def __str__(self):
 		return self.driver.first_name + " " + self.driver.last_name + " - " + str(self.time)
 
-
-
+class Review(models.Model):
+	author = models.ForeignKey(User)
+	rating = models.IntegerField(max_length=1, default=0)
+	comments = models.CharField(max_length=2000)
+	ride = models.ForeignKey(Ride)
+	subject = models.ForeignKey(Student, null=True)
 
 

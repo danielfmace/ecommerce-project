@@ -3,12 +3,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth import login
 
+import datetime
+
 from django.shortcuts import render, render_to_response
-from rides.forms import UserForm, StudentForm, RideForm, ScheduleForm
+from rides.forms import UserForm, StudentForm, RideForm, ScheduleForm, RiderReviewForm, DriverReviewForm, CancelDriveForm
 from django.template import RequestContext
 
 from django.contrib.auth.models import User
-from rides.models import Student, Ride
+from rides.models import Student, Ride, Review
 
 @login_required
 def index(request):
@@ -58,6 +60,112 @@ def cancel(request):
 		{'ride': ride},
 		context)
 
+# View for displaying current user's past and current drives/rides
+# Also displays user rating
+@login_required
+def account(request):
+	context=RequestContext(request)
+	current_user = request.user
+	current_student = Student.objects.get(user=current_user)
+	rating = round(current_student.rating, 2)
+	# Get list of past drives
+	past_drives = Ride.objects.filter(driver=current_user, time__lte=datetime.datetime.today())
+	# Scheduled drives
+	sched_drives = Ride.objects.filter(driver=current_user, time__gte=datetime.datetime.today())
+	# Get list of past rides
+	past_rides = Ride.objects.filter(riders__id=current_student.id, time__lte=datetime.datetime.today())
+	# Get list of scheduled rides
+	sched_rides = Ride.objects.filter(riders__id=current_student.id, time__gte=datetime.datetime.today())
+	cancel_drive_form = CancelDriveForm(current_user)
+	return render_to_response(
+		'rides/account.html',
+		{'current_user': current_user, 'current_student': current_student, 'past_drives': past_drives, 'sched_drives': sched_drives, 'past_rides': past_rides, 'sched_rides': sched_rides, 'rating': rating, 'cancel_drive_form': cancel_drive_form},
+		context)
+
+@login_required
+def reviews(request):
+	context = RequestContext(request)
+	current_user = request.user
+	current_student = Student.objects.get(user=current_user)
+	reviews = Review.objects.filter(subject=current_student)
+	return render_to_response('rides/reviews.html',
+		{'reviews': reviews},
+		context)
+
+@login_required
+def pastDrive(request, ride_id):
+	# Attempt to gather information about ride
+	reviewed = False
+	try:
+		ride = Ride.objects.get(pk=ride_id)
+		riders = ride.riders.all()
+	except Ride.DoesNotExist:
+		raise Http404("Drive does not exist")
+	context = RequestContext(request)
+	# Get current user and student information
+	current_user = request.user
+	current_student = Student.objects.get(user=current_user)
+	if request.method == 'POST':
+		review_form = RiderReviewForm(ride, data=request.POST)
+		author = current_user
+		rating = request.POST['rating']
+		comment = request.POST['comment']
+		subject = Student.objects.get(pk=request.POST['subject'])
+		review = Review(author=author, rating=rating, comments=comment, subject=subject, ride=ride)
+		review.save()
+		review_list = Review.objects.filter(subject=subject)
+		subject.updateRating(review_list)
+		subject.save()
+		reviewed = True
+
+	review_form = RiderReviewForm(ride)
+	return render_to_response('rides/pastDrive.html',
+		{'ride': ride, 'riders': riders, 'current_user': current_user, 'current_student': current_student, 'review_form': review_form, 'reviewed': reviewed},
+		context)
+
+@login_required
+def pastRide(request, ride_id):
+	reviewed = False
+	try:
+		ride = Ride.objects.get(pk=ride_id)
+		riders = ride.riders.all()
+		driver = ride.driver
+	except Ride.DoesNotExist:
+		raise Http404("Ride does not exist")
+	context = RequestContext(request)
+	current_user = request.user
+	current_student = Student.objects.get(user=current_user)
+	if request.method == 'POST':
+		review_form = DriverReviewForm(ride, data=request.POST)
+		author = current_user
+		rating = request.POST['rating']
+		comment = request.POST['comment']
+		subject = Student.objects.get(pk=request.POST['subject'])
+		review = Review(author=author, rating=rating, comments=comment, subject=subject, ride=ride)
+		review.save()
+		review_list = Review.objects.filter(subject=subject)
+		subject.updateRating(review_list)
+		subject.save()
+		reviewed = True
+
+	review_form = DriverReviewForm(ride)
+	return render_to_response('rides/pastRide.html',
+		{'ride': ride, 'riders': riders, 'current_user': current_user, 'current_sudent': current_student, 'review_form': review_form, 'reviewed': reviewed},
+		context)
+
+@login_required
+def cancelDrive(request):
+	context = RequestContext(request)
+	current_user = request.user
+	current_student = Student.objects.get(user=current_user)
+	if request.method == 'POST':
+		ride_id = request.POST['rides']
+		ride = Ride.objects.get(id=ride_id)
+		ride.delete()
+	return render_to_response('rides/cancelDrive.html',
+		{'current_student': current_student},
+		context)
+
 @login_required
 def schedule(request):
 	context = RequestContext(request)
@@ -79,7 +187,6 @@ def profile(request):
 	# Get current user and student
 	current_user = request.user
 	current_student = Student.objects.get(user=current_user)
-
 	return render_to_response(
 		'rides/profile.html',
 		{'current_user': current_user, 'current_student': current_student},

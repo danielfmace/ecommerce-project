@@ -2,6 +2,7 @@ from rides.models import Student, Ride
 from django.contrib.auth.models import User
 from django.core.files.images import get_image_dimensions
 from django import forms
+from datetime import datetime
 
 class UserForm(forms.ModelForm):
 	password = forms.CharField(widget=forms.PasswordInput())
@@ -50,7 +51,30 @@ class StudentForm(forms.ModelForm):
 class ScheduleForm(forms.Form):
 	def __init__(self, ride, *args, **kwargs):
 		super(ScheduleForm, self).__init__(*args, **kwargs)
-		self.fields['rides'] = forms.ChoiceField(choices = [ (r.id, str(r)) for r in Ride.objects.filter(start = ride.start, dest = ride.start)])
+		self.fields['rides'] = forms.ChoiceField(choices = [ (r.id, str(r)) for r in Ride.objects.filter(start = ride.start, dest = ride.dest, time__gte = datetime.now())])
+
+class CancelDriveForm(forms.Form):
+	def __init__(self, user, *args, **kwargs):
+		super(CancelDriveForm, self).__init__(*args, **kwargs)
+		self.fields['rides'] = forms.ChoiceField(choices = [ (r.id, str(r)) for r in Ride.objects.filter(driver = user, time__gte = datetime.now())])
+
+class RiderReviewForm(forms.Form):
+	def __init__(self, ride, *args, **kwargs):
+		super(RiderReviewForm, self).__init__(*args, **kwargs)
+		driver = ride.driver
+		driver = Student.objects.get(user=driver)
+		self.fields['subject'] = forms.ChoiceField(choices = [ (r.id, str(r)) for r in ride.riders.all() ])
+		self.fields['comment'] = forms.CharField(max_length=2000)
+		self.fields['rating'] = forms.ChoiceField(choices = [(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')])
+
+class DriverReviewForm(forms.Form):
+	def __init__(self, ride, *args, **kwargs):
+		super(DriverReviewForm, self).__init__(*args, **kwargs)
+		driver = ride.driver
+		driver = Student.objects.get(user=driver)
+		self.fields['subject'] = forms.ChoiceField(choices = [ (driver.id, str(driver))])
+		self.fields['comment'] = forms.CharField(max_length=2000)
+		self.fields['rating'] = forms.ChoiceField(choices = [(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')])
 
 class RideForm(forms.ModelForm):
 	class Meta:

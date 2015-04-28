@@ -11,6 +11,72 @@
 
 <div class="center">
 <p class="main">
+<a href="/rides/">
+<img class="displayed" title="Home" src="{% static "rides/fullrideslogo_w_txt.png" %}" 
+alt="Home" height="162" widght="180"/>
+</a>
+<p>Current rating: {{ rating }}</p>
+<br>
+<a href="/rides/account/reviews/">My Reviews</a>
+<br>
+{% if past_drives %}
+	<p>Past drives:</p>
+	<ul>
+	{% for ride in past_drives %}
+		<li><a href="/rides/pastDrive/{{ ride.id }}/">{{ ride.time }}</a></li>
+	{% endfor %}
 
-<img class="displayed" src="{% static "rides/fullrideslogo_w_txt.png" %}" 
-alt="Logo" height="162" widght="180"/>
+	</ul>
+{% else %}
+	<p>You haven't done any drives yet!</p>
+{% endif %}
+
+{% if past_rides %}
+	<p>Past rides:</p>
+	<ul>
+	{% for ride in past_rides %}
+		<li><a href="/rides/pastRide/{{ ride.id }}/">{{ ride.time }}</a></li>
+	{% endfor %}
+
+	</ul>
+{% else %}
+	<p>You haven't done any rides yet!</p>
+{% endif %}
+
+{% if sched_drives %}
+	<p>Scheduled drives:</p>
+	<ul>
+	{% for ride in sched_drives %}
+		{{ ride.time }}
+	{% endfor %}
+
+	</ul>
+	<p>Cancel a drive:</p>
+<form id="cancel_drive_form" method="post" action="/rides/cancelDrive/"
+                enctype="multipart/form-data" class="main" align="middle">
+
+            {% csrf_token %}
+
+            <!-- Display each form. The as_p method wraps each element in a paragraph
+                 (<p>) element. This ensures each element appears on a new line,
+                 making everything look neater. -->
+            {{ cancel_drive_form.as_p }}
+
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Cancel" />
+</form>
+{% else %}
+	<p>You don't have any upcoming drives yet!</p>
+{% endif %}
+
+{% if sched_rides %}
+	<p>Scheduled rides:</p>
+	<ul>
+	{% for ride in sched_rides %}
+		{{ ride.time }}
+	{% endfor %}
+
+	</ul>
+{% else %}
+	<p>You don't have any upcoming rides yet!</p>
+{% endif %}

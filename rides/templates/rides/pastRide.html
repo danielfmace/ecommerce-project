@@ -11,27 +11,42 @@
 
 <div class="center">
 <p class="main">
-
 <a href="/rides/">
 <img class="displayed" src="{% static "rides/fullrideslogo_w_txt.png" %}" 
 alt="Home" height="162" widght="180"/>
 </a>
-
-{{ dest }}
+{% if reviewed %}
+Thanks for leaving your passengers a review. Feel free to add another!
 <br>
-{{ start }}
+{% endif %}
+Your ride on: {{ ride.time }}
 <br>
-
-<form id="schedule_form" method="post" action="/rides/schedule/"
-                enctype="multipart/form-data" class="main" align="middle">
+Start: {{ ride.start }}
+<br>
+Dest: {{ ride.dest }}
+<br>
+{% if riders %}
+	Your fellow passengers:
+	<br>
+	{% for rider in riders %}
+		{{ rider.user }}
+		<br>
+	{% endfor %}
+{% else %}
+	You don't have any passengers.
+{% endif %}
+<br>
+Add a review for your driver:
+<br>
+<form id="review_form" method="post" action="/rides/pastRide/{{ ride.id }}/" enctype="multipart/form-data" class="main" align="middle">
 
             {% csrf_token %}
 
             <!-- Display each form. The as_p method wraps each element in a paragraph
                  (<p>) element. This ensures each element appears on a new line,
                  making everything look neater. -->
-            {{ schedule_form.as_p }}
+            {{ review_form.as_p }}
 
             <!-- Provide a button to click to submit the form. -->
-            <input type="submit" name="submit" value="Schedule" />
+            <input type="submit" name="submit" value="Add Review" />
 </form>
