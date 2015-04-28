@@ -16,4 +16,5 @@ urlpatterns = patterns('',
     url(r'^pastRide/(?P<ride_id>\d+)/$', views.pastRide, name='pastRide'),
     url(r'^account/reviews/$', views.reviews, name='reviews'),
     url(r'^cancelDrive/$', views.cancelDrive, name='cancelDrive'),
+    url(r'^cancelRide/$', views.cancelRide, name='cancelRide'),
     )

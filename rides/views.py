@@ -6,7 +6,7 @@ from django.contrib.auth import login
 import datetime
 
 from django.shortcuts import render, render_to_response
-from rides.forms import UserForm, StudentForm, RideForm, ScheduleForm, RiderReviewForm, DriverReviewForm, CancelDriveForm
+from rides.forms import UserForm, StudentForm, RideForm, ScheduleForm, RiderReviewForm, DriverReviewForm, CancelDriveForm, CancelRideForm
 from django.template import RequestContext
 
 from django.contrib.auth.models import User
@@ -77,9 +77,10 @@ def account(request):
 	# Get list of scheduled rides
 	sched_rides = Ride.objects.filter(riders__id=current_student.id, time__gte=datetime.datetime.today())
 	cancel_drive_form = CancelDriveForm(current_user)
+	cancel_ride_form = CancelRideForm(current_student)
 	return render_to_response(
 		'rides/account.html',
-		{'current_user': current_user, 'current_student': current_student, 'past_drives': past_drives, 'sched_drives': sched_drives, 'past_rides': past_rides, 'sched_rides': sched_rides, 'rating': rating, 'cancel_drive_form': cancel_drive_form},
+		{'current_user': current_user, 'current_student': current_student, 'past_drives': past_drives, 'sched_drives': sched_drives, 'past_rides': past_rides, 'sched_rides': sched_rides, 'rating': rating, 'cancel_drive_form': cancel_drive_form, 'cancel_ride_form': cancel_ride_form},
 		context)
 
 @login_required
@@ -163,6 +164,20 @@ def cancelDrive(request):
 		ride = Ride.objects.get(id=ride_id)
 		ride.delete()
 	return render_to_response('rides/cancelDrive.html',
+		{'current_student': current_student},
+		context)
+
+@login_required
+def cancelRide(request):
+	context = RequestContext(request)
+	current_user = request.user
+	current_student = Student.objects.get(user=current_user)
+	if request.method == 'POST':
+		ride_id = request.POST['rides']
+		ride = Ride.objects.get(id=ride_id)
+		ride.riders.remove(current_student)
+		ride.save()
+	return render_to_response('rides/cancelRide.html',
 		{'current_student': current_student},
 		context)
 

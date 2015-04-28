@@ -1,0 +1,18 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'rides/style.css' %}" />
+{% if user.is_authenticated %}
+    <a href="/rides/account/" style="float: right"> {{ user.username }}'s Account</a>
+    <br>
+    <a href="/rides/logout/" style="float: right"> Logout </a>
+{% else %}
+    <a href="/rides/register/" style="float: right">Register Here</a>
+{% endif %}
+
+<div class="center">
+<p class="main">
+<a href="/rides/">
+<img class="displayed" src="{% static "rides/fullrideslogo_w_txt.png" %}" 
+alt="Home" height="162" widght="180"/>
+</a>
+You've successfully canceled your ride.

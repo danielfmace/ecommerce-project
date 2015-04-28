@@ -58,6 +58,11 @@ class CancelDriveForm(forms.Form):
 		super(CancelDriveForm, self).__init__(*args, **kwargs)
 		self.fields['rides'] = forms.ChoiceField(choices = [ (r.id, str(r)) for r in Ride.objects.filter(driver = user, time__gte = datetime.now())])
 
+class CancelRideForm(forms.Form):
+	def __init__(self, student, *args, **kwargs):
+		super(CancelRideForm, self).__init__(*args, **kwargs)
+		self.fields['rides'] = forms.ChoiceField(choices = [ (r.id, str(r)) for r in Ride.objects.filter(riders__id=student.id, time__gte = datetime.now())])
+
 class RiderReviewForm(forms.Form):
 	def __init__(self, ride, *args, **kwargs):
 		super(RiderReviewForm, self).__init__(*args, **kwargs)
